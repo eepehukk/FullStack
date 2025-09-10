@@ -1,8 +1,9 @@
 import { useState } from 'react'
 
-
 {/*
   HUOM! Koodia on tehty vuonna 2023 (Vai milloin ekan kerran aloitinkaa kurssin),  joten outoja committeja vastaamaan nyky standardeja tulee.
+  
+  Tässä tehtävässä on paljon yksinkertaisia kommentteja muistuttamaan minua tehtävän kulusta
   */}
 const Button = ({handleClick, title}) => {
   return (
@@ -12,6 +13,9 @@ const Button = ({handleClick, title}) => {
   )
 }
 
+{/*
+  Alustetaan arviot ja tarkistetaan, että arvioita on olemassa.
+  */}
 const Statistics = (props) => {
   if (props.all === 0) {
     return (
@@ -37,7 +41,9 @@ const Statistics = (props) => {
     </div>
   )
 }
-
+{/*
+  Asetetaaan tekstit & arvostelut taulukkoon
+  */}
 const StatisticLine = (props) => {
   return (
     <tr>
@@ -57,6 +63,11 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
   const [all, setAll] = useState(0)
+
+  {/*
+    Handlerit lisäävät tarvittaviin viittauksiin lisäykset. Käytin "all" constia,
+    koska koin sen helpottavan kokonaisuuden hallintaa
+    */}
 
   const handleGood = () => {
     console.log('succesfully logged + ', good)
