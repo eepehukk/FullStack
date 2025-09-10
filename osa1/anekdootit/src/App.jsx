@@ -15,12 +15,13 @@ const App = () => {
   const [selected, setSelected] = useState(0)
 
   const handleNext = () => {
-    setSelected(selected +1)
+    const random = Math.floor(Math.random() * 8);
+    setSelected(random)
   }
 
   return (
     <div>
-      {anecdotes[selected]}
+      {anecdotes[selected]} <br/>
       <button onClick={handleNext}>Next anecdote</button>
     </div>
   )
