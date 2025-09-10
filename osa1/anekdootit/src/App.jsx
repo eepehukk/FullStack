@@ -13,16 +13,26 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  const votes = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0}
 
   const handleNext = () => {
     const random = Math.floor(Math.random() * 8);
     setSelected(random)
   }
 
+  const handleVote = () => {
+    {/*
+      Seuraavaksi tähän äänestyksen käsittely. Kuinka yhdistää äänet anekdootteihin, 
+      jonka jälkeen voidaan alkaa miettimään kuinka ääniä saadaan lisättyä.
+      */
+    }
+  }
+
   return (
     <div>
       {anecdotes[selected]} <br/>
       <button onClick={handleNext}>Next anecdote</button>
+      <button>Vote</button>
     </div>
   )
 }
