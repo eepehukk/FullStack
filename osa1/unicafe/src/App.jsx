@@ -1,5 +1,9 @@
 import { useState } from 'react'
 
+
+{/*
+  HUOM! Koodia on tehty vuonna 2023 (Vai milloin ekan kerran aloitinkaa kurssin),  joten outoja committeja vastaamaan nyky standardeja tulee.
+  */}
 const Button = ({handleClick, title}) => {
   return (
     <button title={title} onClick={handleClick}>
