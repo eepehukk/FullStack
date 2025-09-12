@@ -13,7 +13,7 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
-  const [votes, setVotes] = useState({ 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0})
+  const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
 
   const handleNext = () => {
     const random = Math.floor(Math.random() * 8);
@@ -28,8 +28,10 @@ const App = () => {
     }
     const copy = { ...votes }
     console.log(copy[2])
-    copy[2] += 1
-    console.log(copy[2])
+    copy[2] = +1
+    console.log('kopionnissa', copy[2])
+    setVotes[copy]
+    console.log('Äänestyksissä', copy[2])
   }
 
   return (
