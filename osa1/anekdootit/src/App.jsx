@@ -12,7 +12,7 @@ const App = () => {
     'The only way to go fast, is to go well.'
   ]
    
-  const [selected, setSelected] = useState(0)
+  const [selected, setSelected] = useState(Math.floor(Math.random() * 8))
   const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
 
   const handleNext = () => {
@@ -28,10 +28,10 @@ const App = () => {
     }
     const copy = [ ...votes ]
     console.log(copy[2])
-    copy[2] = +1
-    console.log('kopionnissa', copy[2])
-    setVotes[copy[2]]
-    console.log('Äänestyksissä', copy[2])
+    copy[selected] += 1
+    console.log('kopionnissa', copy[selected])
+    setVotes(copy)
+    console.log('Äänestyksissä', copy[selected])
   }
 
   return (
