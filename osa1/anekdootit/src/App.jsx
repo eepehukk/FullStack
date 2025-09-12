@@ -26,19 +26,22 @@ const App = () => {
       jonka jälkeen voidaan alkaa miettimään kuinka ääniä saadaan lisättyä.
       */
     }
-    const copy = { ...votes }
+    const copy = [ ...votes ]
     console.log(copy[2])
     copy[2] = +1
     console.log('kopionnissa', copy[2])
-    setVotes[copy]
+    setVotes[copy[2]]
     console.log('Äänestyksissä', copy[2])
   }
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       {anecdotes[selected]} <br/>
       <button onClick={handleNext}>Next anecdote</button>
       <button onClick={handleVote}>Vote</button>
+
+      <h1>Anecdote with most votes</h1>
     </div>
   )
 }
