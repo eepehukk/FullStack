@@ -22,28 +22,32 @@ const Part = (props) => {
 const Content = (props) => {
   return (
     <div>
-      <Part parts={props.parts[0]}/>
-      <Part parts={props.parts[1]}/>
-      <Part parts={props.parts[2]}/>     
+      {props.parts.map((part, index) => (
+        <Part key={index} parts={part} />
+      ))}
     </div>
   )
 }
+
 
 const Total = (props) => {
   return (
     <div>
       <p>
-        Number of exercises: {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises}
+        Number of exercises: {props.parts.reduce((sum, part) => sum + part.exercises, 0)}
       </p>
     </div>
   )
 }
 
 const Course = (props) => {
-  console.log('Testi1', props.course.name)
   return (
     <div>
       <Header course={props.course} />
+      
+      <Content parts={props.course.parts} />
+
+      <Total parts={props.course.parts} /> 
     </div>
   )
 }
@@ -68,6 +72,11 @@ const App = () => {
         name: 'State of a component',
         exercises: 14,
         id: 3
+      },
+      {
+        name: 'Redux',
+        exercises: 11,
+        id: 4
       }
     ]
   }
