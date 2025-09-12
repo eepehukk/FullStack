@@ -15,33 +15,35 @@ const App = () => {
   const [selected, setSelected] = useState(Math.floor(Math.random() * 8))
   const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
 
+  {/*
+  Seuraava tavoite:
+  Tarkistetaan votes listasta suurin arvo ja yhdistetää se indeksiin, jonka avulla määritetään eniten ääniä oleva anekdootti
+  */}
+  const maxVotes = Math.max(...votes)
+  const index = votes.indexOf(maxVotes)
+  
+
   const handleNext = () => {
     const random = Math.floor(Math.random() * 8);
     setSelected(random)
   }
 
   const handleVote = () => {
-    {/*
-      Seuraavaksi tähän äänestyksen käsittely. Kuinka yhdistää äänet anekdootteihin, 
-      jonka jälkeen voidaan alkaa miettimään kuinka ääniä saadaan lisättyä.
-      */
-    }
     const copy = [ ...votes ]
-    console.log(copy[2])
     copy[selected] += 1
-    console.log('kopionnissa', copy[selected])
     setVotes(copy)
-    console.log('Äänestyksissä', copy[selected])
   }
 
   return (
     <div>
       <h1>Anecdote of the day</h1>
       {anecdotes[selected]} <br/>
-      <p>has  {votes[selected]} votes</p>
-      <button onClick={handleNext}>Next anecdote</button>
+      has {votes[selected]} votes <br/>
       <button onClick={handleVote}>Vote</button>
+      <button onClick={handleNext}>Next anecdote</button>
       <h1>Anecdote with most votes</h1>
+      {anecdotes[index]} <br/>
+      has {votes[index]} votes
     </div>
   )
 }
