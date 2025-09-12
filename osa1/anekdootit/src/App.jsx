@@ -13,8 +13,7 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
-  const votes = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0}
-  const copy = { ...votes }
+  const [votes, setVotes] = useState({ 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0})
 
   const handleNext = () => {
     const random = Math.floor(Math.random() * 8);
@@ -27,6 +26,7 @@ const App = () => {
       jonka jälkeen voidaan alkaa miettimään kuinka ääniä saadaan lisättyä.
       */
     }
+    const copy = { ...votes }
     console.log(copy[2])
     copy[2] += 1
     console.log(copy[2])
