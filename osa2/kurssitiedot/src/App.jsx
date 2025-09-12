@@ -1,4 +1,5 @@
 const Header = (props) => {
+  console.log(props.course.name)
   return (
     <div>
       <h1>
@@ -39,8 +40,11 @@ const Total = (props) => {
 }
 
 const Course = (props) => {
+  console.log('Testi1', props.course.name)
   return (
-    console.log('testi1', props.course.parts[0].name)
+    <div>
+      <Header course={props.course} />
+    </div>
   )
 }
 
