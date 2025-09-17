@@ -1,28 +1,27 @@
-const Header = ({props}) => {
-    console.log(props.course.name)
+const Header = ({name}) => {
     return (
       <div>
         <h1>
-          {props.course.name}
+          {name}
         </h1>
       </div>
     )
 }
   
-  const Part = ({props}) => {
+  const Part = ({parts}) => {
     return (
       <div>
         <p>
-          {props.parts.name}: {props.parts.exercises}
+          {parts.name}: {parts.exercises}
         </p>
       </div>
     )
   }
   
-  const Content = ({props}) => {
+  const Content = ({parts}) => {
     return (
       <div>
-        {props.parts.map((part, index) => (
+        {parts.map((part, index) => (
           <Part key={index} parts={part} />
         ))}
       </div>
@@ -44,10 +43,10 @@ const Header = ({props}) => {
     console.log("testi toimiiks tää:", props)
     return (
       <div>
-        <Header course={props.course} />
-        {/*}
-        <Content parts={props.course.parts} />
-  
+        <Header name={props.name} />
+
+        <Content parts={props.parts} />
+        {/*}  
         <Total parts={props.course.parts} /> */}
       </div>
     )
