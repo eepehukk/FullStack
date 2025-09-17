@@ -28,12 +28,12 @@ const Persons = ({ persons }) => (
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' },
-    { name: 'eemil     k'}
+    { name: 'Arto Hellas', number: '000' },
+    { name: 'eemil     k', number: '1234' }
   ]) 
-  const [filter, setFilter] = useState('') 
+  const [filter] = useState('') 
   const [newName, setNewName] = useState('a new Person...')
-  const [newNumber, setNewNumber] = useState('a new Number')
+  const [newNumber, setNewNumber] = useState('a new Number...')
 
   const showPersons = persons.filter(person =>
     person.name.toLowerCase().includes(filter.trim().toLowerCase())
@@ -58,8 +58,8 @@ const App = () => {
 
     console.log('Testi ilmestyykö henkilö:', nameObject)
     setPersons(persons.concat(nameObject))
-    setNewName('a new Person')
-    setNewNumber('a new Number')
+    setNewName('a new Person...')
+    setNewNumber('a new Number...')
   }
 
   const handleName = (event) => {
