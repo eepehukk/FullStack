@@ -1,9 +1,9 @@
 const Header = ({name}) => {
     return (
       <div>
-        <h1>
+        <h2>
           {name}
-        </h1>
+        </h2>
       </div>
     )
 }
@@ -29,11 +29,11 @@ const Header = ({name}) => {
   }
   
   
-  const Total = ({props}) => {
+  const Total = ({parts}) => {
     return (
       <div>
         <p>
-          Number of exercises: {props.parts.reduce((sum, part) => sum + part.exercises, 0)}
+          <b>Number of exercises: {parts.reduce((sum, part) => sum + part.exercises, 0)}</b>
         </p>
       </div>
     )
@@ -46,8 +46,8 @@ const Header = ({name}) => {
         <Header name={props.name} />
 
         <Content parts={props.parts} />
-        {/*}  
-        <Total parts={props.course.parts} /> */}
+
+        <Total parts={props.parts} />
       </div>
     )
   }
