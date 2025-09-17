@@ -15,7 +15,7 @@ const PersonForm = ({ addPerson, newName, handleName, newNumber, handleNumber}) 
 )
 
 const Person = ({ person }) => (
-  <li>{person.name}</li>
+  <li>{person.name} {person.number}</li>
 )
 
 const Persons = ({ persons }) => (
