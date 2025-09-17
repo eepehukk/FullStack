@@ -44,6 +44,7 @@ const App = () => {
     console.log('button clicked', event.target)
 
     const trimmedName = newName.trim()
+    const trimmedNumber = newNumber.trim()
     if (persons.some(person => person.name === trimmedName)) {
       console.log(`${trimmedName} on jo olemassa`)
       alert(`${trimmedName} is already added added to phonebook`)
@@ -52,6 +53,7 @@ const App = () => {
 
     const nameObject = { 
       name: trimmedName,
+      number: trimmedNumber
     }
 
     console.log('Testi ilmestyykö henkilö:', nameObject)
