@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react'
 
-
 const Filter = ({ filter, handleFilterChange }) => (
   <div>
     Filter shown with: <input value={filter} onChange={handleFilterChange} />
   </div>
 )
-
 
 const PersonForm = ({ addPerson, newName, handleName, newNumber, handleNumber}) => (
   <form onSubmit={addPerson}>
@@ -63,13 +61,29 @@ const App = () => {
 
     const trimmedName = newName.trim()
     const trimmedNumber = newNumber.trim()
-    if (persons.some(person => person.name === trimmedName)) {
-      console.log(`${trimmedName} on jo olemassa`)
-      if (persons.some(person => person.number == trimmedNumber)){
-        return console.log("lisäämälläsi henkilöllä on sama nimi sekä numero")
+
+    const existingPerson = persons.find(person => person.name === trimmedName)
+    console.log(`Luodaan muutuja olemassa oleva henkilö, jos luodulla henkilöllä on sama nimi. Se esitetään nyt ${existingPerson.name}`)
+
+    if (existingPerson) {
+      if (existingPerson.number === trimmedNumber) {
+        alert(`${trimmedName} is already in the phonebook with the same number.`)
+        return
       }
-      window.confirm(`${trimmedName} is already added to phonebook, replace the old number with a new one?`)
-      return console.log("lisäämälläsi henkilöllä on sama nimi sekä numero")
+
+      if (window.confirm(` ${trimmedName} is already added to phonebook, replace the old number with a new one? `)) {
+        const updatedPerson = { ...existingPerson, number: trimmedNumber }
+        personService
+          .update(existingPerson.id, updatedPerson)
+          .then(returnedPerson => {
+            setPersons(
+              persons.map(person => person.id !== existingPerson.id ? person : returnedPerson)
+            );
+            setNewName('a new Person...')
+            setNewNumber('a new Number...')
+          })
+      }
+      return
     }
 
     const nameObject = { 
