@@ -6,7 +6,7 @@ const CountryList = ({ countries }) => {
     return <p>Too many matches, specify another filter</p>
   }
 
-  if (countries.length >= 1) {
+  if (countries.length > 1) {
     return (
       <ul>
         {countries.map(country => (
@@ -15,6 +15,14 @@ const CountryList = ({ countries }) => {
       </ul>
     )
   }
+
+  if (countries.length === 1) {
+    return (
+      < CountryDetails country={countries[0]} />
+    )
+  }
+
+  return <p>No matches</p>
 }
 
 
