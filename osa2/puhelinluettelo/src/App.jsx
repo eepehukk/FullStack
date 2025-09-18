@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
-
 
 
 const Filter = ({ filter, handleFilterChange }) => (
@@ -8,6 +6,7 @@ const Filter = ({ filter, handleFilterChange }) => (
     Filter shown with: <input value={filter} onChange={handleFilterChange} />
   </div>
 )
+
 
 const PersonForm = ({ addPerson, newName, handleName, newNumber, handleNumber}) => (
   <form onSubmit={addPerson}>
@@ -23,14 +22,14 @@ const PersonForm = ({ addPerson, newName, handleName, newNumber, handleNumber}) 
   </form>
 )
 
-const Person = ({ person }) => (
-  <li>{person.name} {person.number}</li>
+const Person = ({ person, handleDelete }) => (
+  <li>{person.name} {person.number} <button onClick={() => handleDelete(person.name)}>DELETE</button></li>
 )
 
-const Persons = ({ persons }) => (
+const Persons = ({ persons, handleDelete }) => (
   <div>
   {persons.map(person => (
-    <Person key={person.name} person={person} />
+    <Person key={person.name} person={person} handleDelete={handleDelete} />
   ))}
   </div>
 )
@@ -100,6 +99,10 @@ const App = () => {
     setFilter(event.target.value)
   }
 
+  const deletePerson = (name) => {
+    console.log('iso DELETE', name)
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -113,7 +116,7 @@ const App = () => {
         handleNumber={handleNumber}
       />
       <h2>Numbers</h2>
-      <Persons persons={showPersons} />
+      <Persons persons={showPersons} handleDelete={deletePerson} />
     </div>
   )
 
