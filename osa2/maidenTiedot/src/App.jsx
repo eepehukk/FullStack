@@ -25,6 +25,12 @@ const CountryList = ({ countries }) => {
   return <p>No matches</p>
 }
 
+const CountryDetails = ({ country }) => {
+  console.log("Maa:", country)
+  return (
+    <h1>{country.name.common}</h1>
+  )
+}
 
 const App = () => {
   const [countries, setCountries] = useState([])
