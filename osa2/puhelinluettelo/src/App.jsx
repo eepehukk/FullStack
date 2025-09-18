@@ -65,8 +65,11 @@ const App = () => {
     const trimmedNumber = newNumber.trim()
     if (persons.some(person => person.name === trimmedName)) {
       console.log(`${trimmedName} on jo olemassa`)
-      alert(`${trimmedName} is already added added to phonebook`)
-      return
+      if (persons.some(person => person.number == trimmedNumber)){
+        return console.log("lisäämälläsi henkilöllä on sama nimi sekä numero")
+      }
+      window.confirm(`${trimmedName} is already added to phonebook, replace the old number with a new one?`)
+      return console.log("lisäämälläsi henkilöllä on sama nimi sekä numero")
     }
 
     const nameObject = { 
