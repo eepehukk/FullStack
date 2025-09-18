@@ -29,6 +29,11 @@
       "id": "cebf",
       "name": "Niko",
       "number": "0505-49"
+    },
+    {
+      "id": "1f4c",
+      "name": "a new Person...",
+      "number": "a new Number..."
     }
   ]
 }

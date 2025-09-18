@@ -100,7 +100,9 @@ const App = () => {
   }
 
   const deletePerson = (name) => {
-    console.log('iso DELETE', name)
+    if (window.confirm(`Delete ${name}?`)) {
+      console.log('iso DELETE', name)
+    }
   }
 
   return (
