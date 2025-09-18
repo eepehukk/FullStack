@@ -32,13 +32,28 @@ const Persons = ({ persons, handleDelete }) => (
   </div>
 )
 
-import personService from './services/persons'
+const Notification = ({ message, type }) => {
+  if (message === null) {
+    return null
+  }
 
+  return (
+    <div className={type}>
+      {message}
+    </div>
+  )
+}
+
+import personService from './services/persons'
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [filter, setFilter] = useState('') 
   const [newName, setNewName] = useState('a new Person...')
   const [newNumber, setNewNumber] = useState('a new Number...')
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
+
+
 
   useEffect(() => {
     console.log('effect')
@@ -63,7 +78,6 @@ const App = () => {
     const trimmedNumber = newNumber.trim()
 
     const existingPerson = persons.find(person => person.name === trimmedName)
-    console.log(`Luodaan muutuja olemassa oleva henkilö, jos luodulla henkilöllä on sama nimi. Se esitetään nyt ${existingPerson.name}`)
 
     if (existingPerson) {
       if (existingPerson.number === trimmedNumber) {
@@ -81,6 +95,15 @@ const App = () => {
             );
             setNewName('a new Person...')
             setNewNumber('a new Number...')
+            setSuccessMessage(`Changed ${trimmedName} number`)
+            setTimeout(() => {
+              setSuccessMessage(null)
+            }, 4000)
+          })
+          .catch(error => {
+            const message = error.response?.data?.error || `Information of ${trimmedName} has already been removed from server`
+            setErrorMessage(message)
+            setTimeout(() => setErrorMessage(null), 4000)
           })
       }
       return
@@ -98,7 +121,16 @@ const App = () => {
         setPersons(persons.concat(createdPerson))
         setNewName('a new Person...')
         setNewNumber('a new Number...')
-    })
+        setSuccessMessage(`Added ${trimmedName}`)
+        setTimeout(() => {
+          setSuccessMessage(null)
+        }, 4000)
+      })
+      .catch(error => {
+        const message = error.response?.data?.error || 'Unexpected error'
+        setErrorMessage(message)
+        setTimeout(() => setErrorMessage(null), 4000)
+      })
   }
 
   const handleName = (event) => {
@@ -123,6 +155,10 @@ const App = () => {
         .then(() => {
           console.log(`${name} on poistettu palvelimelta`)
           setPersons(persons.filter(person => person.id !== id))
+          setSuccessMessage(`Deleted ${name} contactinfo`)
+          setTimeout(() => {
+            setSuccessMessage(null)
+          }, 4000)
         })
     }
   }
@@ -130,6 +166,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage} type="error" />
+      <Notification message={successMessage} type="success" />
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
       <h2>Add a new person</h2>
       <PersonForm 
