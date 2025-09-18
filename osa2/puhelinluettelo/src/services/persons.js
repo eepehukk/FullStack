@@ -12,8 +12,7 @@ const create = newObject => {
 }
 
 const deletePerson = deleteId => {
-  const request = axios.delete(baseUrl)
-  return request.then(baseUrl/deleteId)
+  return axios.delete(`${baseUrl}/${deleteId}`)
 }
 
 export default { 
