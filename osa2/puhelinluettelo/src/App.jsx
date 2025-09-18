@@ -23,13 +23,13 @@ const PersonForm = ({ addPerson, newName, handleName, newNumber, handleNumber}) 
 )
 
 const Person = ({ person, handleDelete }) => (
-  <li>{person.name} {person.number} <button onClick={() => handleDelete(person.name)}>DELETE</button></li>
+  <li>{person.name} {person.number} <button onClick={() => handleDelete(person.name, person.id)}>DELETE</button></li>
 )
 
 const Persons = ({ persons, handleDelete }) => (
   <div>
   {persons.map(person => (
-    <Person key={person.name} person={person} handleDelete={handleDelete} />
+    <Person key={person.id} person={person} handleDelete={handleDelete} />
   ))}
   </div>
 )
@@ -99,9 +99,14 @@ const App = () => {
     setFilter(event.target.value)
   }
 
-  const deletePerson = (name) => {
+  const handleDeletePerson = (name, id) => {
     if (window.confirm(`Delete ${name}?`)) {
-      console.log('iso DELETE', name)
+      personService
+        .deletePerson(id)
+        .then(() => {
+          console.log(`${name} on poistettu palvelimelta`)
+          setPersons(persons.filter(person => person.id !== id))
+        })
     }
   }
 
@@ -118,7 +123,7 @@ const App = () => {
         handleNumber={handleNumber}
       />
       <h2>Numbers</h2>
-      <Persons persons={showPersons} handleDelete={deletePerson} />
+      <Persons persons={showPersons} handleDelete={handleDeletePerson} />
     </div>
   )
 
