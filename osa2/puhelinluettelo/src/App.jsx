@@ -35,6 +35,8 @@ const Persons = ({ persons }) => (
   </div>
 )
 
+import personService from './services/persons'
+
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [filter, setFilter] = useState('') 
@@ -43,11 +45,11 @@ const App = () => {
 
   useEffect(() => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
+    personService
+      .getAll()
+      .then(initialPersons => {
         console.log('pidettiin lupaus')
-        setPersons(response.data)
+        setPersons(initialPersons)
       })
   }, [])
   console.log('render', persons.length, 'persons')
@@ -74,9 +76,13 @@ const App = () => {
     }
 
     console.log('Testi ilmestyykö henkilö:', nameObject)
-    setPersons(persons.concat(nameObject))
-    setNewName('a new Person...')
-    setNewNumber('a new Number...')
+    personService
+      .create(nameObject)
+      .then(createdPerson => {
+        setPersons(persons.concat(createdPerson))
+        setNewName('a new Person...')
+        setNewNumber('a new Number...')
+    })
   }
 
   const handleName = (event) => {
