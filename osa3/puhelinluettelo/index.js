@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 
+app.use(express.json())
+
 let persons = [
     {
       name: "Arto Hellas",
@@ -21,16 +23,6 @@ let persons = [
       name: "Mary Poppendieck",
       number: "39-23-6423122",
       id: "4"
-    },
-    {
-      id: "004e",
-      name: "Rontti",
-      number: "050-4904094"
-    },
-    {
-      id: "004f",
-      name: "Rontti1000",
-      number: "050-4904094"
     }
 ]
 
@@ -63,6 +55,43 @@ app.delete('/api/persons/:id', (request, response) => {
 
   persons = persons.filter(person => person.id !== id)
   response.status(204).end()
+})
+
+const generateId = () => {
+  const maxId = persons.length > 0
+    ? Math.max(...persons.map(n => Number(n.id)))
+    : 0
+  return String(maxId + 1)
+}
+
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+
+  if (!body.number) {
+    return response.status(400).json({ 
+      error: 'Person\'s number isn\'t added' 
+    })
+  } else if (!body.name) {
+    return response.status(400).json({
+      error: 'Name is missing'
+    })
+  }
+
+  if (persons.some(person => person.name === body.name)) {
+    return response.status(400).json({
+        error: "Contact name must be unique"
+    })
+  }
+
+  const person = {
+    name: body.name,
+    number: body.number,
+    id: generateId()
+  }
+
+  persons = persons.concat(person)
+
+  response.json(person)
 })
 
 // EI TULE MUUUTTUMAAAN
