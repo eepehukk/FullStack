@@ -3,38 +3,7 @@ const express = require('express')
 const app = express()
 const morgan = require('morgan')
 
-const Person = require('./models/person')
-// MATRIAALISTA CNTRL C & V -----------------------------------------
-const mongoose = require('mongoose')
-
-// ÄLÄ KOSKAAN TALLETA SALASANOJA GitHubiin!
-const password = process.argv[2]
-const url = process.env.MONGODB_URI
-
-mongoose.set('strictQuery',false)
-mongoose.connect(url)
-.then(result => {
-  console.log('connected to MongoDB')
-})
-.catch((error) => {
-  console.log('error connecting to MongoDB:', error.message)
-})
-
-const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
-})
-
-personSchema.set('toJSON', {
-  transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString()
-    delete returnedObject._id
-    delete returnedObject.__v
-  }
-})
-
-module.exports = mongoose.model('Person', personSchema)
-// MATRIAALISTA CNTRL C & V -----------------------------------------
+const Person = require('./models/persons')
 
 app.use(express.static('dist'))
 
