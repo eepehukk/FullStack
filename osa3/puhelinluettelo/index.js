@@ -18,7 +18,7 @@ const requestLogger = (request, response, next) => {
 app.use(express.json())
 app.use(requestLogger)
 
-// Virheenkäsittelymiddleware
+// Virheenkäsittely middleware
 const handleError = (error, request, response, next) => {
   console.error(error.message)
 
@@ -66,11 +66,22 @@ app.get('/api/persons/:id', (request, response, next) => {
 
 // Poisto
 app.delete('/api/persons/:id', (request, response, next) => {
+  console.log('Trying to delete id:', request.params.id)
+
   Person.findByIdAndRemove(request.params.id)
-    .then(() => {
-      response.status(204).end()
+    .then(result => {
+      if (result) {
+        console.log('Deleted:', result)
+        response.status(204).end()
+      } else {
+        console.log('Not found in DB')
+        response.status(404).json({ error: 'person not found' })
+      }
     })
-    .catch(error => next(error))
+    .catch(error => {
+      console.error('Delete failed:', error.message)
+      next(error)
+    })
 })
 
 {/*
