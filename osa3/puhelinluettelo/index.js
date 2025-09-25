@@ -1,23 +1,39 @@
+require('dotenv').config ()
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
 
+const Person = require('./models/person')
 // MATRIAALISTA CNTRL C & V -----------------------------------------
 const mongoose = require('mongoose')
 
 // ÄLÄ KOSKAAN TALLETA SALASANOJA GitHubiin!
 const password = process.argv[2]
-const url = `mongodb+srv://eemilhukkanen01_db_user:${password}@cluster0.ynkwjej.mongodb.net/personApp?retryWrites=true&w=majority&appName=Cluster0`
+const url = process.env.MONGODB_URI
 
 mongoose.set('strictQuery',false)
 mongoose.connect(url)
+.then(result => {
+  console.log('connected to MongoDB')
+})
+.catch((error) => {
+  console.log('error connecting to MongoDB:', error.message)
+})
 
 const personSchema = new mongoose.Schema({
   name: String,
   number: String,
 })
 
-const Person = mongoose.model('Person', personSchema)
+personSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+  }
+})
+
+module.exports = mongoose.model('Person', personSchema)
 // MATRIAALISTA CNTRL C & V -----------------------------------------
 
 app.use(express.static('dist'))
@@ -117,7 +133,7 @@ const unknownEndpoint = (request, response) => {
 app.use(unknownEndpoint)
 
 // EI TULE MUUUTTUMAAAN
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
