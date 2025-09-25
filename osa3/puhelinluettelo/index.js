@@ -18,6 +18,22 @@ const requestLogger = (request, response, next) => {
 app.use(express.json())
 app.use(requestLogger)
 
+// Virheenkäsittelymiddleware
+const handleError = (error, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }  
+  if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }
+
+  next(error)
+}
+
+app.use(handleError)
+
 morgan.token('body', function (req, res) { return req.method === 'POST' ? JSON.stringify(req.body) : ''})
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
@@ -65,6 +81,7 @@ const generateId = () => {
   return String(maxId + 1)
 }
 */}
+
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
@@ -87,6 +104,7 @@ const unknownEndpoint = (request, response) => {
 }
 
 app.use(unknownEndpoint)
+app.use(handleError)
 
 // EI TULE MUUUTTUMAAAN
 const PORT = process.env.PORT
