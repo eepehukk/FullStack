@@ -19,7 +19,7 @@ app.use(express.json())
 app.use(requestLogger)
 
 // Virheenkäsittelymiddleware
-const handleError = (error, response, next) => {
+const handleError = (error, request, response, next) => {
   console.error(error.message)
 
   if (error.name === 'CastError') {
