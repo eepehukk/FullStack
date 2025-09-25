@@ -68,7 +68,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 app.delete('/api/persons/:id', (request, response, next) => {
   console.log('Trying to delete id:', request.params.id)
 
-  Person.findByIdAndRemove(request.params.id)
+  Person.findByIdAndDelete(request.params.id)
     .then(result => {
       if (result) {
         console.log('Deleted:', result)
