@@ -7,19 +7,6 @@ const Person = require('./models/persons')
 
 app.use(express.static('dist'))
 
-// Säilytetään kova koodaus varmuudeksi.
-//let persons = [
-//    {
-//
-//      name: "Arto Hellas",
-//
-//      number: "040-123456",
-//
-//      id: "1"
-//
-//    },
-//]
-
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
   console.log('Path:  ', request.path)
