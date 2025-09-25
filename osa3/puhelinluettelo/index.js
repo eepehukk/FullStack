@@ -2,34 +2,38 @@ const express = require('express')
 const app = express()
 const morgan = require('morgan')
 
-// const cors = require('cors')
+// MATRIAALISTA CNTRL C & V -----------------------------------------
+const mongoose = require('mongoose')
 
-// app.use(cors())
+// ÄLÄ KOSKAAN TALLETA SALASANOJA GitHubiin!
+const password = process.argv[2]
+const url = `mongodb+srv://eemilhukkanen01_db_user:${password}@cluster0.ynkwjej.mongodb.net/personApp?retryWrites=true&w=majority&appName=Cluster0`
+
+mongoose.set('strictQuery',false)
+mongoose.connect(url)
+
+const personSchema = new mongoose.Schema({
+  name: String,
+  number: String,
+})
+
+const Person = mongoose.model('Person', personSchema)
+// MATRIAALISTA CNTRL C & V -----------------------------------------
 
 app.use(express.static('dist'))
 
-let persons = [
-    {
-      name: "Arto Hellas",
-      number: "040-123456",
-      id: "1"
-    },
-    {
-      name: "Ada Lovelace",
-      number: "39-44-5323523",
-      id: "2"
-    },
-    {
-      name: "Dan Abramov",
-      number: "12-43-234345",
-      id: "3"
-    },
-    {
-      name: "Mary Poppendieck",
-      number: "39-23-6423122",
-      id: "4"
-    }
-]
+// Säilytetään kova koodaus varmuudeksi.
+//let persons = [
+//    {
+//
+//      name: "Arto Hellas",
+//
+//      number: "040-123456",
+//
+//      id: "1"
+//
+//    },
+//]
 
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
@@ -47,67 +51,63 @@ morgan.token('body', function (req, res) { return req.method === 'POST' ? JSON.s
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 app.get('/api/persons', (request, response) => {
-  response.json(persons)
+  Person.find ({}).then(persons => {  
+    response.json(persons)
+  })
 })
 
 app.get('/info', (request, response) => {
   const date = new Date()
-  response.send(`<p>Phonebook has info for ${persons.length} people</p> <p> ${date} </p>`)
+  Person.find ({}).then(persons => {  
+    response.send(`<p>Phonebook has info for ${persons.length} people</p> <p> ${date} </p>`)
+  })
 })
 
-app.get('/api/persons/:id', (request, response) => {
-  const id = request.params.id
-  const person = persons.find ( person => person.id === id)
-  response.json(person)
+// Yksittäinen id
+app.get('/api/persons/:id', (request, response, next) => {
+  Person.findById(request.params.id)
+    .then(person => {
+      if (person) {
+        response.json(person)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
-app.delete('/api/persons/:id', (request, response) => {
-  const id = request.params.id
-
-  const personExists = persons.some(person => person.id === id)
-  if (!personExists) {
-    return response.status(404).json({ error: 'Person not found' })
-  }
-
-  persons = persons.filter(person => person.id !== id)
-  response.status(204).end()
+// Poisto
+app.delete('/api/persons/:id', (request, response, next) => {
+  Person.findByIdAndRemove(request.params.id)
+    .then(() => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
+{/*
 const generateId = () => {
   const maxId = persons.length > 0
     ? Math.max(...persons.map(n => Number(n.id)))
     : 0
   return String(maxId + 1)
 }
-
+*/}
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
-  if (!body.number) {
-    return response.status(400).json({ 
-      error: 'Person\'s number isn\'t added' 
-    })
-  } else if (!body.name) {
-    return response.status(400).json({
-      error: 'Name is missing'
-    })
+  if (!body.name || !body.number) {
+    return response.status(400).json({ error: 'name or number missing' })
   }
 
-  if (persons.some(person => person.name === body.name)) {
-    return response.status(400).json({
-        error: "Contact name must be unique"
-    })
-  }
-
-  const person = {
+  const person = new Person({
     name: body.name,
     number: body.number,
-    id: generateId()
-  }
+  })
 
-  persons = persons.concat(person)
-
-  response.json(person)
+  person.save().then(savedPerson => {
+    response.json(savedPerson)
+  })
 })
 
 const unknownEndpoint = (request, response) => {
