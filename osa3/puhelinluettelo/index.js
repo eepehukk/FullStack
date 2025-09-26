@@ -86,11 +86,14 @@ app.delete('/api/persons/:id', (request, response, next) => {
 })
 
 // Lisäys
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
-  if (!body.name || !body.number) {
-    return response.status(400).json({ error: 'name or number missing' })
+  if (!body.name) {
+    return response.status(400).json({ error: 'name or number missing / too short' })
+  }
+  else if (!body.number) {
+    return response.status(400).json({ error: 'number missing' })
   }
 
   const person = new Person({
@@ -101,6 +104,7 @@ app.post('/api/persons', (request, response) => {
   person.save().then(savedPerson => {
     response.json(savedPerson)
   })
+  .catch(error => next(error))
 })
 
 // Päivitys
