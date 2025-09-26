@@ -95,7 +95,7 @@ const App = () => {
             );
             setNewName('a new Person...')
             setNewNumber('a new Number...')
-            setSuccessMessage(`Changed ${trimmedName} number`)
+            setSuccessMessage(`Changed ${trimmedName}'s number`)
             setTimeout(() => {
               setSuccessMessage(null)
             }, 4000)
