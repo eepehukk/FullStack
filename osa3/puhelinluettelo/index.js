@@ -4,6 +4,7 @@ const app = express()
 const morgan = require('morgan')
 
 const Person = require('./models/persons')
+const { findOne } = require('./models/persons')
 
 app.use(express.static('dist'))
 
@@ -84,15 +85,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
     })
 })
 
-{/*
-const generateId = () => {
-  const maxId = persons.length > 0
-    ? Math.max(...persons.map(n => Number(n.id)))
-    : 0
-  return String(maxId + 1)
-}
-*/}
-
+// Lisäys
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
@@ -109,6 +102,28 @@ app.post('/api/persons', (request, response) => {
     response.json(savedPerson)
   })
 })
+
+// Päivitys
+app.put('/api/persons/:id', (request, response, next) => {
+  const { name, number } = request.body
+
+  const updatedPerson = { name, number }
+
+  Person.findByIdAndUpdate(
+    request.params.id,
+    updatedPerson,
+    { new: true, runValidators: true, context: 'query' }
+  )
+    .then(result => {
+      if (result) {
+        response.json(result)
+      } else {
+        response.status(404).json({ error: 'person not found' })
+      }
+    })
+    .catch(error => next(error))
+})
+
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint Rontti lol' })
