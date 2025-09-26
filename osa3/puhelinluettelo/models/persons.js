@@ -23,7 +23,15 @@ const personSchema = new mongoose.Schema({
   number: {
     type: String,
     minlength: 8,
-    required: true
+    required: true,
+    validate: {
+      validator: function(numero) {
+        // Hyväksyy muodot "xx-xxxx..." tai "xxx-xxxx..."
+        const numeroTestaus = /^\d{2,3}-\d+$/
+        return numeroTestaus.test(numero)
+      },
+      message: props => `${props.value} is not a valid phone number! Format should be like 09-1234567 or 040-1234567.`
+    }
   }
 })
 
