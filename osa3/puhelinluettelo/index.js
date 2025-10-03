@@ -4,7 +4,7 @@ const app = express()
 const morgan = require('morgan')
 
 const Person = require('./models/persons')
-const { findOne } = require('./models/persons')
+//const { findOne } = require('./models/persons')
 
 app.use(express.static('dist'))
 
@@ -25,7 +25,7 @@ const handleError = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
-  }  
+  }
   if (error.name === 'ValidationError') {
     return response.status(400).json({ error: error.message })
   }
@@ -35,19 +35,19 @@ const handleError = (error, request, response, next) => {
 
 app.use(handleError)
 
-morgan.token('body', function (req, res) { return req.method === 'POST' ? JSON.stringify(req.body) : ''})
+morgan.token('body', function (req) { return req.method === 'POST' ? JSON.stringify(req.body) : ''})
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 app.get('/api/persons', (request, response) => {
-  Person.find ({}).then(persons => {  
+  Person.find ({}).then(persons => {
     response.json(persons)
   })
 })
 
 app.get('/info', (request, response) => {
   const date = new Date()
-  Person.find ({}).then(persons => {  
+  Person.find ({}).then(persons => {
     response.send(`<p>Phonebook has info for ${persons.length} people</p> <p> ${date} </p>`)
   })
 })
@@ -88,7 +88,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
 // Lisäys
 app.post('/api/persons', (request, response, next) => {
   const body = request.body
-  
+
   {/*
   if (!body.name) {
     return response.status(400).json({ error: 'name or number missing / too short' })
@@ -104,8 +104,7 @@ app.post('/api/persons', (request, response, next) => {
 
   person.save().then(savedPerson => {
     response.json(savedPerson)
-  })
-  .catch(error => next(error))
+  }).catch(error => next(error))
 })
 
 // Päivitys
