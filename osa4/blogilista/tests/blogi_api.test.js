@@ -34,9 +34,9 @@ beforeEach(async () => {
 })
 
 test('all blogs are returned', async () => {
-  const response = await api.get('/api/blogs')
+  const blogs = await api.get('/api/blogs')
 
-  assert.strictEqual(response.body.length, testBlogs.length)
+  assert.strictEqual(blogs.body.length, testBlogs.length)
 })
 
 test('blogs are returned as json', async () => {
@@ -44,6 +44,15 @@ test('blogs are returned as json', async () => {
     .get('/api/blogs')
     .expect(200)
     .expect('Content-Type', /application\/json/)
+})
+
+
+test('property should be called named id', async () => {
+  const blogs = await api.get('/api/blogs')
+  blogs.body.forEach(blog => {
+    assert.ok(blog.id)
+    assert.strictEqual(blog._id, undefined)
+  })
 })
 
 after(async () => {
