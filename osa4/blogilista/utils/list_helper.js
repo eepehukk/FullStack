@@ -59,10 +59,44 @@ const mostBlogs = (blogs) => {
     }
   }
   
-
+  const mostLikes = (blogs) => {
+    if (blogs.length === 0) {
+        return null
+    }
+    
+    // Lasketaan kaikkien kirjoittajien tykkäykset yhteen
+    const likesByAuthor = {}
+  
+    blogs.forEach(blog => {
+      if (likesByAuthor[blog.author]) {
+        likesByAuthor[blog.author] += blog.likes
+      } else {
+        likesByAuthor[blog.author] = blog.likes
+      }
+    })
+  
+    // Etsitään kirjoittaja, jolla eniten tykkäyksiä
+    let maxLikes = 0
+    let maxAuthor = ''
+  
+    for (const author in likesByAuthor) {
+      if (likesByAuthor[author] > maxLikes) {
+        maxLikes = likesByAuthor[author]
+        maxAuthor = author
+      }
+    }
+  
+    return {
+      author: maxAuthor,
+      likes: maxLikes
+    }
+  }
+  
   module.exports = {
     dummy,
     totalLikes,
     favouriteBlog,
-    mostBlogs
+    mostBlogs,
+    mostLikes
   }
+  
