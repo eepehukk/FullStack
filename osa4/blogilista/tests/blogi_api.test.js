@@ -81,3 +81,23 @@ test('blog without content is not added', async () => {
 after(async () => {
   await mongoose.connection.close()
 })
+
+// testi liket 0 automaattisesti
+test('if likes value is empty then replace it with 0', async () => {
+  const newBlog = {
+    title: 'Blog with no likes field',
+    author: 'eepehukk',
+    url: 'miukumauku'
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  const addedBlog = blogsAtEnd.find(blog => blog.title === 'Blog with no likes field')
+
+  assert.strictEqual(addedBlog.likes, 0)
+})
