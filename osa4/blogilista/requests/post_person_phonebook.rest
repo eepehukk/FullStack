@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Parocin kourua",
-  "author": "Jänis",
+  "title": "LVI DI inssi",
+  "author": "VILLE VALLATON",
   "url": "https://example.com/testiblogi",
-  "likes": 5
+  "likes": 145
 }

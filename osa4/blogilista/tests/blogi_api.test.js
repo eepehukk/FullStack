@@ -28,8 +28,6 @@ test('all blogs are returned', async () => {
   assert.strictEqual(blogs.body.length, helper.initialBlogs.length)  
 })
 
-
-
 test('property should be called named id', async () => {
   const blogs = await api.get('/api/blogs')
   blogs.body.forEach(blog => {
@@ -37,7 +35,6 @@ test('property should be called named id', async () => {
     assert.strictEqual(blog._id, undefined)
   })
 })
-
 
 // Testi, että voidaan postata
 test('a valid blog can be added', async () => {
@@ -63,7 +60,8 @@ test('a valid blog can be added', async () => {
   assert(titles.includes('El Jefe ei ole kipeä koskaan'))
 })
 
-test('blog without title nor url is not added', async () => {
+// Testataan, että blogissa on oltava title ja url
+test('blog without title or url is not added', async () => {
   const newBlog = {
     author: 'Anonymous',
     likes: 10,
@@ -100,4 +98,21 @@ test('if likes value is empty then replace it with 0', async () => {
   const addedBlog = blogsAtEnd.find(blog => blog.title === 'Blog with no likes field')
 
   assert.strictEqual(addedBlog.likes, 0)
+})
+
+// Blogin poiston testaaminenn HUOM MATERIAALIN RIVIT 114-115 ongelma n.content tsekkaa se.
+test('a blog can be deleted', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToDelete = blogsAtStart[0]
+
+  await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204)
+
+  const blogsAtEnd = await helper.blogsInDb()
+
+  const contents = blogsAtEnd.map(n => n.content)
+  assert(!contents.includes(blogToDelete.content))
+
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
 })
