@@ -100,7 +100,7 @@ test('if likes value is empty then replace it with 0', async () => {
   assert.strictEqual(addedBlog.likes, 0)
 })
 
-// Blogin poiston testaaminenn HUOM MATERIAALIN RIVIT 114-115 ongelma n.content tsekkaa se.
+// Blogin poiston testaaminen
 test('a blog can be deleted', async () => {
   const blogsAtStart = await helper.blogsInDb()
   const blogToDelete = blogsAtStart[0]
