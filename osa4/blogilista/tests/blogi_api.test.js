@@ -111,8 +111,8 @@ test('a blog can be deleted', async () => {
 
   const blogsAtEnd = await helper.blogsInDb()
 
-  const contents = blogsAtEnd.map(n => n.content)
-  assert(!contents.includes(blogToDelete.content))
+  const contents = blogsAtEnd.map(n => n.id)
+  assert(!contents.includes(blogToDelete.id))
 
   assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
 })
