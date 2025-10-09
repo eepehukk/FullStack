@@ -63,9 +63,10 @@ test('a valid blog can be added', async () => {
   assert(titles.includes('El Jefe ei ole kipeä koskaan'))
 })
 
-test('blog without content is not added', async () => {
+test('blog without title nor url is not added', async () => {
   const newBlog = {
-    important: true
+    author: 'Anonymous',
+    likes: 10,
   }
 
   await api
@@ -74,7 +75,6 @@ test('blog without content is not added', async () => {
     .expect(400)
 
   const blogsAtEnd = await helper.blogsInDb()
-
   assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
 })
 
