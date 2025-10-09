@@ -128,3 +128,31 @@ describe('Deletion of blog', () => {
 after(async () => {
   await mongoose.connection.close()
 })
+
+describe('updating a blog', () => {
+// Blogin päivittäminen. tehtävänanto huono, koska ei ota selvää pitääkö vain likejä muokata vai pitääkö muokata kaikkea
+// Uskon blogs.js putin pystyvän muokkaamaan kaikkea mutta testaan vain likejä
+  test('a likes can be updated', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+
+    const updatedData = {
+      title: blogToUpdate.title,
+      author: blogToUpdate.author,
+      url: blogToUpdate.url,
+      likes: blogToUpdate.likes + 1
+    }
+
+    const response = await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updatedData)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    assert.strictEqual(response.body.likes, blogToUpdate.likes + 1)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    const updatedBlog = blogsAtEnd.find(b => b.id === blogToUpdate.id)
+    assert.strictEqual(updatedBlog.likes, blogToUpdate.likes + 1)
+  })
+})

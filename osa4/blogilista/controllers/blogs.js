@@ -30,6 +30,21 @@ blogsRouter.delete('/:id', async (request, response) => {
   response.status(204).end()
 })
 
+// Blogin päivittäminen. tehtävänanto huono, koska ei ota selvää pitääkö vain likejä muokata vai pitääkö muokata kaikkea
+blogsRouter.put('/:id', async (request, response) => {
+  const { title, author, url, likes  } = request.body
 
+  const updatedBlog = await Blog.findByIdAndUpdate(
+    request.params.id,
+    { title, author, url, likes },
+    { new: true, runValidators: true, context: 'query' }
+  )
+
+  if (updatedBlog) {
+    response.json(updatedBlog)
+  } else {
+    response.status(404).end()
+  }
+})
 
 module.exports = blogsRouter
