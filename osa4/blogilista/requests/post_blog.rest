@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "LVI DI inssi",
-  "author": "VILLE VALLATON",
-  "url": "https://example.com/testiblogi",
-  "likes": 145
+  "title": "Miihaelin matka kouluun",
+  "url": "https://example.com/testiblogi2",
+  "likes": 1455,
+  "userId": "68fa10d282756318d7cdb91b"
 }
